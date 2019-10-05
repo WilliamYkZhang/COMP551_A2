@@ -2,3 +2,7 @@ reddit_test.csv
 reddit_train.csv
 .idea/
 .ipynb_checkpoints/
+prediction_1.csv
+prediction_2.csv
+2_LSTM_250.h5
+2_LSTM_250_weights.h5
