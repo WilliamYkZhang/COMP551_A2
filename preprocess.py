@@ -68,3 +68,5 @@ if __name__ == "__main__":
     # stemmer.stem("responsiveness")
     # stemmer.stem("responsivity")
     # stemmer.stem("unresponsive") # there are some restriction to this stemmer as it didn't strip the "un"
+
+
