@@ -1,0 +1,5 @@
+We need to try with and without stemming the words, with or without stopwords 
+Test different effect of preprocessing on result..
+Try out different stemming functions 
+Remove punctuations ? 
+Remove Youtube links and random symbol like &2gt 
