@@ -15,17 +15,22 @@ def reddit_preprocess():
     # Apply stemming function 
     df["stemmed"] = df["comments"].apply(stem)
 
-    # Split feature and targ(et variables 
+    # Transform each subreddit into an unique integer
+    labels, levels = pd.factorize(df["subreddits"])
+    df["labels"] = pd.Series(labels)
+
+    # # Split feature and targ(et variables 
     X = df["stemmed"] # pandas series
-    y = df["subreddits"] # pandas series
+    y = df["labels"] # pandas series
 
     # Split training and validation set
     x_train, x_valid, y_train, y_valid = train_test_split(X, y, train_size = 0.8, test_size = 0.2, shuffle=True)
 
+    # Vectorize training data
     vectorized_x_train = vectorize(x_train)
     # vectorized_x_test = vectorize(x_valid) Only transform not fit )
 
-    print(vectorized_x_train)
+    print(vectorized_x_train, y_train)
 
     # TODO: Get rid of &gt and Youtube links
     # TODO: Implement Regularization (i.e. PCA) 
@@ -53,15 +58,13 @@ if __name__ == "__main__":
 
     # download the "all-corpora" corpus
     # download() # only need to be executed once in order to download language packages from nltk
-    # reddit_preprocess()
+    reddit_preprocess()
     
     # Testing different Stemming functions 
-    from nltk.stem.snowball import SnowballStemmer # There are several stemmers that you can use 
+    # from nltk.stem.snowball import SnowballStemmer # There are several stemmers that you can use 
 
-    # Declare language I want to stem in
-    stemmer = SnowballStemmer("english")
-    stemmer.stem("responsiveness")
-    stemmer.stem("responsivity")
-    stemmer.stem("unresponsive") # there are some restriction to this stemmer as it didn't strip the "un"
-
-
+    # # Declare language I want to stem in
+    # stemmer = SnowballStemmer("english")
+    # print(stemmer.stem("responsiveness"))
+    # print(stemmer.stem("responsivity"))
+    # print(stemmer.stem("unresponsive")) # there are some restriction to this stemmer as it didn't strip the "un"

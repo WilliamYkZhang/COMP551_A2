@@ -5,3 +5,4 @@ Remove punctuations ?
 Remove Youtube links and random symbol like &2gt 
 Try model using GridSearch CV 
 Implement PCA 
+Change all classes to number features
