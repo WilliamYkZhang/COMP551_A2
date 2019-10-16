@@ -6,3 +6,6 @@ Remove Youtube links and random symbol like &2gt
 Try model using GridSearch CV 
 Implement PCA 
 Change all classes to number features
+investigate n-grams
+Try ensemble method (Bagging, stacking methods if time allows)
+Multinomial NB in sklearn should beat TA's baseline

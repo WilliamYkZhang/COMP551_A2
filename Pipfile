@@ -11,6 +11,7 @@ sklearn = "*"
 pandas = "*"
 scipy = "*"
 nltk = "*"
+unidecode = "*"
 
 [requires]
 python_version = "3.7"
