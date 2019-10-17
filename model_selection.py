@@ -8,4 +8,4 @@ def validate(model, features, target):
     # we need to transform each fold and train on every n-1 folds. 
 
 def grid_search_cv(model, params):
-    return GridSearchCV(model, param_grid. = params)
+    return GridSearchCV(model, param_grid = params)

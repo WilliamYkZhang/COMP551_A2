@@ -45,8 +45,9 @@ def reddit_preprocess():
     stop_words = set(stopwords.words('english'))
 
     # Create a tf_idf word vectorizer 
-    tf_idf_vectorizer = TfidfVectorizer(lowercase=True, ngram_range = (1,2), decode_error = 'ignore', strip_accents='unicode', stop_words=stop_words, analyzer = "word")  
-    
+    tf_idf_vectorizer = TfidfVectorizer(lowercase=True,  decode_error = 'ignore', strip_accents='unicode', stop_words=stop_words, analyzer = "word")  
+    # ngram_range = (1,2),
+
     # Vectorize data 
     x_train = tf_idf_vectorizer.fit_transform(x_train)
     x_valid = tf_idf_vectorizer.transform(x_valid)
@@ -83,6 +84,40 @@ def stem(sentence):
     for i in word_tokens:
         stemmed_str.append(stemmer.stem(i))
     return " ".join(stemmed_str)
+
+def preprocess_test():
+    # Read dataset
+    df = pd.read_csv("reddit_train.csv")
+    test = pd.read_csv("reddit_test.csv")
+
+    # Apply stemming function 
+    df["cleaned"] = df["comments"].apply(clean_text)
+    test["cleaned"] = test["comments"].apply(clean_text)
+
+    # Transform each subreddit into an unique integer
+    labels, levels = pd.factorize(df["subreddits"])
+    df["labels"] = pd.Series(labels)
+
+    # Split feature and target variables 
+    X = df["cleaned"] # pandas series
+    y = df["labels"] # pandas series
+
+    # Get a list of stopwords
+    stop_words = set(stopwords.words('english'))
+
+    # Create a tf_idf word vectorizer 
+    tf_idf_vectorizer = TfidfVectorizer(lowercase=True,  decode_error = 'ignore', strip_accents='unicode', stop_words=stop_words, analyzer = "word")  
+
+    # Vectorize data 
+    x_train = tf_idf_vectorizer.fit_transform(X)
+    x_test = tf_idf_vectorizer.transform(test["cleaned"])
+
+    print(test["cleaned"])
+    # TODO: Implement Regularization (i.e. PCA) 
+    # TODO: Append comment ID to the prediction
+
+    return x_train, x_test, y
+
 
 if __name__ == "__main__":    
     # download the "all-corpora" corpus

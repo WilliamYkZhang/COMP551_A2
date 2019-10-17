@@ -8,7 +8,7 @@ from preprocess import reddit_preprocess
 if __name__ == "__main__":
     x_train, x_valid, y_train, y_valid = reddit_preprocess()
     
-    classifier = LogisticRegression(max_iter=3000)
+    classifier = LogisticRegression(max_iter==3000)
     classifier.fit(x_train,y_train)
     y_pred = classifier.predict(x_valid)
     print(accuracy_score(y_pred = y_pred, y_true= y_valid))
