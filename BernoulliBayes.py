@@ -1,109 +1,108 @@
 import numpy as np
+import pandas as pd
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import CountVectorizer
+from nltk.corpus import stopwords
+from nltk.stem.snowball import SnowballStemmer
+from nltk.tokenize import word_tokenize
 
 
 class BernoulliBayes:
     _smoothing = 1.
     _nclasses = 0
     _fitParams = None
-    _fitParams0 = None
+    _encoder = preprocessing.LabelEncoder()
 
     def __init__(self, smoothing=1.):
         self._smoothing = smoothing
 
-    def fit(self, trainingSet):
-        self._nclasses = int(np.amax(trainingSet[:, -1])) + 1
+    def fit(self, trainingSet, trainingLabels):
+
+        self._nclasses = np.amax(trainingLabels) + 1
 
         # generates list containing a count of each class occurrence
         occurrences = [0] * self._nclasses
-        for i in range(self._nclasses):
-            for element in trainingSet[:, -1]:
-                if i == element:
-                    occurrences[i] = occurrences[i] + 1
+
+        for element in trainingLabels:
+            occurrences[element] += 1
 
         # fit parameter matrix with shape (nclasses, nfeatures + 1)
-        params = np.array([[0.] * len(trainingSet[0])] * self._nclasses)
+        params = np.zeros((self._nclasses, trainingSet.shape[1] + 1))
 
         # fills params with # of feature occurrences per class then divides by # of class occurrences
         for i in range(self._nclasses):
-            for row in trainingSet:
-                if row[-1] == i:
-                    params[i] += np.append(row[:-1], 1/len(trainingSet))
+            for n, element in enumerate(trainingLabels):
+                if element == i:
+                    params[i, :-1] += trainingSet[n]
             params[i, :-1] = (params[i, :-1] + self._smoothing)/(float(occurrences[i]) + 2. * self._smoothing)
+            params[i, -1] = occurrences[i]/trainingSet.shape[0]
 
-        self._fitParams = np.array(params)
-        print(self._fitParams)
+        self._fitParams = params
 
-        # fit parameter matrix with shape (nclasses, nfeatures)
-        params = np.array([[0.] * (len(trainingSet[0]) - 1)] * self._nclasses)
+    def validate(self, validationSet, validationLabels):
 
-        # fills params with # of feature occurrences per class then divides by # of class occurrences
-        for i in range(self._nclasses):
-            for row in trainingSet:
-                if row[-1] != i:
-                    params[i] += row[:-1]
-            params[i] = (params[i] + self._smoothing) / (float((len(trainingSet) - occurrences[i]) + 2. * self._smoothing))
+        # creating a log odds matrix
+        odds = np.zeros((self._nclasses, validationSet.shape[0]), dtype=np.float32)
 
-        self._fitParams0 = np.array(params)
-        print(self._fitParams0)
+        # adding class prior probability
+        for Class in range(self._nclasses):
+            odds[Class] += np.log(self._fitParams[Class, -1]/(1 - self._fitParams[Class, -1]))
 
-    def validate(self, validationSet):
-        valParams = self._fitParams
-        valParams0 = self._fitParams0
+        odds += np.log(self._fitParams[:, :-1]) @ validationSet.T
+        odds += (np.log(1 - self._fitParams[:, :-1]).sum(axis=1).reshape((-1, 1))) - (np.log(1 - self._fitParams[:, :-1]) @ validationSet.T)
 
-        # if validation set has more features than the training set, fill with smoothed priors
-        if len(validationSet[0]) > self._fitParams.shape[1]:
-            smoothPrior = self._smoothing/(self._nclasses + 2. * self._smoothing)
-            for i in range(len(validationSet[0]) - self._fitParams.shape[1]):
-                valParams = np.insert(valParams, -1, [smoothPrior] * self._nclasses, axis=1)
-
-        # if validation set has more features than the training set, fill with smoothed priors
-        if len(validationSet[0]) > self._fitParams0.shape[1]:
-            smoothPrior = self._smoothing / (self._nclasses + 2. * self._smoothing)
-            for i in range(len(validationSet[0]) - self._fitParams0.shape[1]):
-                valParams0 = np.insert(valParams0, -1, [smoothPrior] * self._nclasses, axis=1)
-
-
-            print(valParams)
-            print(valParams0)
         predictions = []
+        for example in odds.T:
+            predictions.append(np.argmax(example))
 
-        # creating an array of class log odds for each example
-        for example in range(len(validationSet)):
-
-            odds = [0.] * self._nclasses
-
-            for Class in range(self._nclasses):
-                # adding class prior probability
-                odds[Class] = np.log(valParams[Class, -1]/(1 - valParams[Class, -1]))
-
-                # adding log odds per feature
-                for feature in range(len(validationSet[:-1])):
-                    if validationSet[example, feature] == 1:
-                        odds[Class] += np.log(valParams[Class, feature]/(valParams0[Class, feature]))
-                    else:
-                        odds[Class] += np.log((1 - valParams[Class, feature])/( 1 - (valParams0[Class, feature])))
-
-            #converting log odds to a prediction
-            bestOdds = odds[0]
-            bestClass = 0
-            for i, n in enumerate(odds):
-                if n > bestOdds:
-                    bestOdds = n
-                    bestClass = i
-
-            predictions.append(bestClass)
-        print(predictions)
+        print("accuracy: " + str(np.sum(predictions == validationLabels)/len(predictions)))
 
 
+def preprocess():
+    # Read dataset
+    df = pd.read_csv("reddit_train.csv")
 
+    # Apply stemming function
+    df["stemmed"] = df["comments"].apply(stem)
 
+    # Transform each subreddit into an unique integer
+    labels, levels = pd.factorize(df["subreddits"])
+    df["labels"] = pd.Series(labels)
 
+    # # Split feature and targ(et variables
+    X = df["stemmed"]  # pandas series
+    y = df["labels"]  # pandas series
 
-meme = np.array([[0., 0., 0.], [0., 1., 1.], [1., 0., 2.]])
+    # Split training and validation set
+    x_train, x_valid, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2, shuffle=True)
 
-validationMeme = np.array([[0., 0., 1., 1., 0.], [0., 0., 1., 0., 1.], [0., 1., 1., 0., 1.], [1., 1., 0., 1., 0.], [1., 1., 0., 1., 0.]])
+    # Vectorize training data
 
-test = BernoulliBayes(smoothing=1.)
-test.fit(meme)
+    vectorized_x_train, vectorized_x_valid = bernoulli_vectorize(x_train, x_valid)
+    # Only transform not fit
+    return vectorized_x_train, y_train, vectorized_x_valid, y_valid
 
-test.validate(validationMeme)
+def stem(sentence):
+    stemmed_str = []
+    word_tokens = word_tokenize(sentence)
+    stemmer = SnowballStemmer("english")
+    for i in word_tokens:
+        stemmed_str.append(stemmer.stem(i))
+    return " ".join(stemmed_str)
+
+def bernoulli_vectorize(training_data, validation_data):
+    """ Vectorize text using CountVectorizer """
+    # Get a list of stopwords
+    stop_words = set(stopwords.words('english'))
+
+    # Create a hashing word vectorizer
+    count_vectorizer = CountVectorizer(decode_error='ignore', strip_accents='unicode', stop_words=stop_words, analyzer="word", binary=True)
+
+    return count_vectorizer.fit_transform(training_data), count_vectorizer.transform(validation_data)
+
+if __name__ == "__main__":
+    test = BernoulliBayes(0.5)
+    testSet, testLabels, validSet, validLabels = preprocess()
+    test.fit(testSet, testLabels)
+    test.validate(validSet, validLabels)
