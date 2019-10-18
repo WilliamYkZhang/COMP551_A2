@@ -15,9 +15,32 @@ MultinomialNB:
 }
 
 Logistic Regression:
-
+{
+    'clf__penalty': ('l1' , 'l2', 'elasticnet', 'none'),
+    'clf__C': (0.001,0.01,0.1, 1.0,10,100),  
+    'clf__max_iter':
+    'clf__solver':
+    'clf__intercept_scaling':
+    'clf__class_weight':
+    'clf__multi_class': ('ovr', 'multinomial', 'auto'),
+    'clf__l1_ratio': (None, 0.25,0.5,0.75)
+}
 Decision Tree:
+{
+
+}
+
+Linear SVC:
+{
+
+}
 
 Random Forest Classifier:
+{
+    
+}
 
-XGBoost
+XGBoost:
+{
+
+}
