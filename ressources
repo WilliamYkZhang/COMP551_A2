@@ -1,2 +1,3 @@
 Stemming vs Lemmatization: https://nlp.stanford.edu/IR-book/html/htmledition/stemming-and-lemmatization-1.html
 Building Python Pipeline: https://scikit-learn.org/stable/tutorial/statistical_inference/putting_together.html
+Cross Validation Pipeline: https://chrisalbon.com/machine_learning/model_evaluation/cross_validation_pipeline/

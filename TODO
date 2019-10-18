@@ -9,3 +9,10 @@ Change all classes to number features
 investigate n-grams
 Try ensemble method (Bagging, stacking methods if time allows)
 Multinomial NB in sklearn should beat TA's baseline
+
+Strip spaces before and at the end of sentence
+Get rid of newlines
+Add features about comment length of each words 
+Plot by subreddit:
+Average comment length 
+for each subreddit most common words (add useless common words as stopwords)
