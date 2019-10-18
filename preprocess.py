@@ -23,7 +23,7 @@ class Preprocessor:
 
     def __init__(self, normalizer):
         self.label_encoder = LabelEncoder()
-        self.tf_idf_vectorizer = TfidfVectorizer(lowercase=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=set(stopwords.words('english')), analyzer = "word")  
+        self.tf_idf_vectorizer = TfidfVectorizer(lowercase=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words= stopwords.words('english'), analyzer = "word", norm='l2', smooth_idf=True)  
         if normalizer == "stemmer": 
             self.normalizer = SnowballStemmer("english")
         elif normalizer == "lemmatizer":
@@ -89,6 +89,6 @@ if __name__ == "__main__":
     stem = "stemmer"
 
     # Create a preprocessed training and test csv file  
-    preprocessor = Preprocessor(stem)
+    preprocessor = Preprocessor(lemmatize)
     preprocessor.preprocess_reddit_train()
     preprocessor.preprocess_reddit_test()

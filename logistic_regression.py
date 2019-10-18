@@ -6,7 +6,6 @@ from preprocess import reddit_preprocess
 
 # Use GridSearchCV to find the best parameters 
 if __name__ == "__main__":
-    x_train, x_valid, y_train, y_valid = reddit_preprocess()
     
     classifier = LogisticRegression(max_iter==3000)
     classifier.fit(x_train,y_train)

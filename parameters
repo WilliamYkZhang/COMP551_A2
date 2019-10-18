@@ -5,6 +5,7 @@ SVC:
     'clf__alpha': (0.00001, 0.000001),
     'clf__penalty': ('l2', 'elasticnet'),
     'clf__max_iter': (10, 50, 80),  
+    'clf__class_weight': (???)
 }
 
 MultinomialNB: 
@@ -16,3 +17,7 @@ MultinomialNB:
 Logistic Regression:
 
 Decision Tree:
+
+Random Forest Classifier:
+
+XGBoost
