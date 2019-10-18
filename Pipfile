@@ -11,6 +11,8 @@ sklearn = "*"
 pandas = "*"
 scipy = "*"
 nltk = "*"
+unidecode = "*"
+xgboost = "*"
 
 [requires]
 python_version = "3.7"
