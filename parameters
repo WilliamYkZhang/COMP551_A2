@@ -1,0 +1,18 @@
+SVC:
+{
+    'clf__C': (0.25, 0.5, 0.75, 1.0),
+    'clf__kernel': ('rbf', 'sigmoid', 'linear', 'poly')
+    'clf__alpha': (0.00001, 0.000001),
+    'clf__penalty': ('l2', 'elasticnet'),
+    'clf__max_iter': (10, 50, 80),  
+}
+
+MultinomialNB: 
+{
+    'clf__alpha': (0.25, 0.5, 0.75),
+    'clf__fit_prior': (True, False),  
+}
+
+Logistic Regression:
+
+Decision Tree:
