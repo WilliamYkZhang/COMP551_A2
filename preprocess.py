@@ -57,7 +57,7 @@ class Preprocessor:
         # Stem words
         processed_sentence = self.normalize(" ".join(word_tokens))
         # TODO: Remove links?
-        return processed_sentence
+        return processed_sentence.strip()
     
     def normalize(self, sentence):
         normalized_str = []
@@ -89,6 +89,6 @@ if __name__ == "__main__":
     stem = "stemmer"
 
     # Create a preprocessed training and test csv file  
-    preprocessor = Preprocessor(lemmatize)
+    preprocessor = Preprocessor(stem)
     preprocessor.preprocess_reddit_train()
     preprocessor.preprocess_reddit_test()

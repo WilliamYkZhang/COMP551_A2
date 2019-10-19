@@ -30,13 +30,22 @@ stopwords = stopwords.words("english")
 
 # Transformers 
 c_vect = CountVectorizer(lowercase=True, encoding="utf-8", decode_error="ignore", strip_accents='unicode',stop_words=stopwords, analyzer = "word")
-tfidf_vect = TfidfVectorizer(lowercase=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords, analyzer = "word")  
+tfidf_vect = TfidfVectorizer(max_df=0.9, lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords, analyzer = "word")
+parameters = {
+    'tfidf__max_features': (None,1000, 5000, 10000),
+    'tfidf__use_idf': (True, False), # Enable inverse-document-frequency reweighting.
+    'tfidf__max_df': (0.75, 0.9), # ignore terms that have a document frequency strictly higher than the given threshold
+    'tfidf__min_df': (0.05, 0.1), #  ignore terms that have a document frequency strictly lower than the given threshold
+    'tfidf__norm': ('l1', 'l2', None), # regularization term
+    'tfidf__smooth_idf': (True, False)
+}
+
 tfidf_trans = TfidfTransformer()
 svd = TruncatedSVD()
 nml = Normalizer()
 
 # Estimators 
-log_reg = LogisticRegression()
+log_reg = LogisticRegression(C=1.0, multi_class='multinomial', solver='newton-cg')
 svc = SVC(C = 1.0, kernel = 'rbf') # class weight , experiement values 
 xgb = xgb.XGBClassifier(objective='multi:softmax')
 decision_tree_clf = DecisionTreeClassifier()
@@ -62,17 +71,36 @@ y_lemma = lemmatized_df["label"]
 
 """ 
 Results
+All scores are mean cross-validation scores 
 Model: Multinomial NB
 Stemmed
+5 folds: 
+0.3420285714285714 (max_features = 1000) 
+0.5112142857142857 (max_features = 5000)
+0.5448857142857143 (max_features = 10000)
+0.5569000000000000 (max_features = 20000)
+0.5577142857142856 (max_features = 25000)
+0.5573857142857143 (max_features = 30000)
+0.5573857142857143 (max_features = 30000, use_idf = True)
+0.5573857142857143 (max_features = 30000, use_idf = True, max_df=0.6)
+0.5573857142857143 (max_features = 30000, use_idf = True, max_df=0.9)
+0.5250428571428571 (max_features = 30000, use_idf = False)
+0.5573714285714286 (max_features = 35000)
+0.5571428571428572 (max_features = 40000)
+0.5571428571428572 (max_features = 50000)
+
 10 folds: 0.5609857142857144
-100 Folds: 0.5643571428571428
-1000 Folds: 0.5639875000000001
+100 folds: 0.5643571428571428
+1000 folds: 0.5639875000000001
 
 Lemmatized
 3 folds: 0.5482855547765574
 5 folds: 0.5561857142857143
+5 folds: 0.5527142857142857 (max_featture = 20000)
+5 folds: 0.5561142857142857 (max_features = 30000)
+5 folds: 0.5560714285714285 (max_features = 40000)
 10 folds: 0.5603857142857143
-100 Folds: 0.5641714285714287
+100 folds: 0.5641714285714287
 
 Model: XGBoost 
 Stemmed
@@ -81,8 +109,16 @@ Lemmatized
 
 
 Model: SVC 
+Stemmed 
+
+Lemmatized 
+
 Model: Logistic Regression:
+Stemmed 
+5 folds: 0.5399857142857143 
+
+Lemmatized 
 
 """
 
-print("Mean cross validation score: ", cross_val_score(pipeline_tfidf, X_stem, y_stem, cv=100).mean()) 
+print("Mean cross validation score: {0}".format(cross_val_score(pipeline_tfidf, X_stem, y_stem, cv=5).mean())) 

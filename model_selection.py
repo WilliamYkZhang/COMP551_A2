@@ -82,7 +82,7 @@ if __name__  == "__main__":
         'tfidf__max_df': (0.75, 0.9), # ignore terms that have a document frequency strictly higher than the given threshold
         'tfidf__min_df': (0.05, 0.1), #  ignore terms that have a document frequency strictly lower than the given threshold
         'tfidf__norm': ('l1', 'l2', None), # regularization term
-        'tfidf__smooth_idf': (True, False), # Smooth idf weights by adding one to document frequencies, as if an extra document was seen containing every term in the collection exactly once.Prevents zero divisions
+        'tfidf__smooth_idf': (True, False), # Smooth idf weights by adding one to document frequencies, as if an extra document was seen containing every term in the collection exactly once. Prevents zero divisions
         'tfidf__ngram_range': ((1, 1), (1, 2)), # n-grams to be extracted
         'clf__alpha': (0.25, 0.5, 0.75),
         'clf__fit_prior': (True, False),      
