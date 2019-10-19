@@ -23,7 +23,7 @@ class Preprocessor:
 
     def __init__(self, normalizer):
         self.label_encoder = LabelEncoder()
-        self.tf_idf_vectorizer = TfidfVectorizer(smooth_idf=True, norm='l2', lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords.words("english"), analyzer = "word")
+        self.tf_idf_vectorizer = TfidfVectorizer(sublinear_tf=True, stop_words=stopwords.words('english').append(["nt", "get", "like", "would","peopl", "one", "think", "time", "becaus"]), smooth_idf=True, norm="l2",lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode',  analyzer = "word")
         if normalizer == "stemmer": 
             self.normalizer = SnowballStemmer("english")
         elif normalizer == "lemmatizer":

@@ -20,17 +20,21 @@ import time
 
 def cross_validation(model, X, y, folds):
     pipeline_tfidf = Pipeline([
-        ('tfidf', TfidfVectorizer(smooth_idf=True, norm='l2', lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords.words('english'), analyzer = "word")),
+        ('tfidf', TfidfVectorizer(sublinear_tf=True, stop_words=stopwords.words('english').append(["nt", "get", "like", "would","peopl", "one", "think", "time", "becaus"]), smooth_idf=True, norm="l2",lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode',  analyzer = "word")),
         ('clf', model)],
          verbose=True)
     # Track CV time
     start = time.time()
-    return "Cross validation scores: {0}\nValidation time: {1}".format(cross_val_score(pipeline_tfidf, X, y, cv=folds),time.time()-start) 
+
+    # Scores
+    scores = cross_val_score(pipeline_tfidf, X, y, cv=folds)
+
+    return "Cross validation scores: {0}\nCross validation mean score: {1}\nValidation time: {2}s".format(scores, scores.mean(),time.time()-start) 
 
 def grid_search_cv(model, X, y, params, folds):
     # Pipeline
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(smooth_idf=True, norm='l2', lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords.words('english'), analyzer = "word")),
+        ('tfidf', TfidfVectorizer(sublinear_tf=True, stop_words=stopwords.words('english').append(["nt", "get", "like", "would","peopl", "one", "think", "time", "becaus"]), smooth_idf=True, norm="l2",lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode',  analyzer = "word")),
         ('clf', model)],
          verbose=True)
 
@@ -64,7 +68,7 @@ def grid_search_cv(model, X, y, params, folds):
 def grid_search_cv_svd(model, X, y, params, folds):
     # Pipeline
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer(smooth_idf=True, norm='l2', lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords.words('english'), analyzer = "word")),
+        ('tfidf', TfidfVectorizer(sublinear_tf=True, stop_words=stopwords.words('english').append(["nt", "get", "like", "would","peopl", "one", "think", "time", "becaus"]), smooth_idf=True, norm="l2",lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode',  analyzer = "word")),
         ('svd', TruncatedSVD()),
         ('nml', Normalizer()),
         ('clf', model)],

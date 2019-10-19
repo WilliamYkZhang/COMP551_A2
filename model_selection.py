@@ -35,14 +35,6 @@ tfidf_trans = TfidfTransformer()
 svd = TruncatedSVD()
 nml = Normalizer()
 
-# Estimators 
-log_reg = LogisticRegression(C=1.0, multi_class='multinomial', solver='newton-cg')
-svc = SVC(C = 1.0, kernel = 'rbf') # class weight , experiement values 
-xgb_clf = xgb.XGBClassifier()
-decision_tree_clf = DecisionTreeClassifier()
-rff = RandomForestClassifier()
-multi_NB = MultinomialNB(alpha=0.25)
-
 # Pipelines 
 # pipeline_cvect = Pipeline([('cvect', c_vect), ('clf', multi_NB)], verbose=True)
 # pipeline_cvect_svd = Pipeline([('cvect', c_vect),('svd', svd), ("nml", nml), ('clf', multi_NB)], verbose=True)
@@ -116,13 +108,13 @@ parameters_cvect_tfidf = {
 
 # Read DataFrame
 stemmed_df = pd.read_csv("preprocessed_reddit_train_SnowballStemmer.csv")
-lemmatized_df = pd.read_csv("preprocessed_reddit_train_WordNetLemmatizer.csv")
+# lemmatized_df = pd.read_csv("preprocessed_reddit_train_WordNetLemmatizer.csv")
 
 # Separate X and Y 
 X_stem = stemmed_df["cleaned"]
 y_stem = stemmed_df["label"]
-X_lemma = lemmatized_df["cleaned"]
-y_lemma = lemmatized_df["label"]
+# X_lemma = lemmatized_df["cleaned"]
+# y_lemma = lemmatized_df["label"]
 
 """ 
 Results
@@ -136,6 +128,9 @@ Stemmed
 0.5569000000000000 (max_features = 20000)
 0.5577142857142856 (max_features = 25000)
 0.5573857142857143 (max_features = 30000)
+0.5347428571428571 (ngram_range=(1,2), norm='l2')
+0.5370000000000000 (ngram_range=(1,2), norm='l1')
+0.5348714285714286 (ngram_range=(1,3), norm='l1')
 0.5573857142857143 (max_features = 30000, use_idf = True)
 0.5573857142857143 (max_features = 30000, use_idf = True, norm='l2')
 0.5372857142857143 (max_features = 30000, use_idf = True, norm='l1')
@@ -148,12 +143,7 @@ Stemmed
 0.5571428571428572 (max_features = 40000)
 0.5571428571428572 (max_features = 50000)
 
-10 folds: 0.5609857142857144
-100 folds: 0.5643571428571428
-100 folds: 0.5717571428571429 TUNED
-1000 folds: 0.5639875000000001
-
-Tuning Multinomial Naive Bayes on 5 folds: 
+Tuning Multinomial Naive Bayes hyperparameters on 5 folds: 
 0.5573857142857143 (alpha = 1)
 0.5640857142857143 (alpha = 0.15)
 0.5643857142857143 (alpha = 0.20)
@@ -163,10 +153,20 @@ Tuning Multinomial Naive Bayes on 5 folds:
 0.5624142857142858 (alpha = 0.5)
 0.5602428571428572 (alpha = 0.75)
 
+Added stopwords 
+0.5651428571428572 ***BEST
+
+
+10 folds: 0.5609857142857144
+100 folds: 0.5643571428571428
+100 folds: 0.5717571428571429 TUNED
+1000 folds: 0.5639875000000001
+
+
 Lemmatized
 3 folds: 0.5482855547765574
 5 folds: 0.5561857142857143
-5 folds: 0.5527142857142857 (max_featture = 20000)
+5 folds: 0.5527142857142857 (max_features = 20000)
 5 folds: 0.5561142857142857 (max_features = 30000)
 5 folds: 0.5560714285714285 (max_features = 40000)
 10 folds: 0.5603857142857143
@@ -180,17 +180,10 @@ Model: SVC
 Stemmed 
 
 Lemmatized 
-
-Model: Logistic Regression:
-Stemmed 
-5 folds: 0.5399857142857143 
-
-Lemmatized 
-
 """
 
 # Estimators 
-log_reg = LogisticRegression(multi_class='multinomial', n_jobs=-1)
+log_reg = LogisticRegression(multi_class='multinomial', n_jobs=-1, solver='newton-cg')
 svc = SVC(C = 1.0, kernel = 'rbf') # class weight , experiement values 
 xgb = xgb.XGBClassifier(objective='multi:softmax')
 decision_tree_clf = DecisionTreeClassifier()
@@ -198,15 +191,6 @@ rff = RandomForestClassifier()
 multi_NB = MultinomialNB(alpha=0.25)
 
 # Model parameters
-params_log_reg = {
-    'clf__C': (0.25, 0.5 ,0.75, 1.0, 1.5),
-    'clf__penalty': ('l2',),
-    'clf__class_weight':('balanced', None),
-    'clf__max_iter': (1000, 2500, 5000),
-    'clf__multi_class': ('ovr', 'multinomial'), # one vs all or multinomial   
-    'clf__solver': ('newton-cg', 'sag', 'lbfgs'),
-}
-
 params_decision_tree = {
     'clf__alpha': (0.25, 0.5, 0.75),
     'clf__fit_prior': (True, False),    
@@ -222,6 +206,8 @@ params_xgboost = {
     'clf__fit_prior': (True, False),    
 }
 
-print(grid_search_cv(model=log_reg, X=X_stem, y=y_stem, params=params_log_reg, folds=5))
+# print(stopwords.words("english"))
+print(cross_validation(model=multi_NB, X=X_stem, y=y_stem, folds=5))
+# print(grid_search_cv(model=log_reg, X=X_stem, y=y_stem, params=params_log_reg, folds=5))
 # print(grid_search_cv(model=rff, X=X_stem, y=y_stem, params=, folds=5))
 # print(grid_search_cv(model=decision_tree_clf, X=X_stem, y=y_stem, params=, folds=5))
