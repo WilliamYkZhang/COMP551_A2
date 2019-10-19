@@ -30,16 +30,7 @@ stopwords = stopwords.words("english")
 
 # Transformers 
 c_vect = CountVectorizer(lowercase=True, encoding="utf-8", decode_error="ignore", strip_accents='unicode',stop_words=stopwords, analyzer = "word")
-tfidf_vect = TfidfVectorizer(max_df=0.9, lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords, analyzer = "word")
-parameters = {
-    'tfidf__max_features': (None,1000, 5000, 10000),
-    'tfidf__use_idf': (True, False), # Enable inverse-document-frequency reweighting.
-    'tfidf__max_df': (0.75, 0.9), # ignore terms that have a document frequency strictly higher than the given threshold
-    'tfidf__min_df': (0.05, 0.1), #  ignore terms that have a document frequency strictly lower than the given threshold
-    'tfidf__norm': ('l1', 'l2', None), # regularization term
-    'tfidf__smooth_idf': (True, False)
-}
-
+tfidf_vect = TfidfVectorizer(smooth_idf=True, norm='l2', lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords, analyzer = "word")
 tfidf_trans = TfidfTransformer()
 svd = TruncatedSVD()
 nml = Normalizer()
@@ -72,7 +63,7 @@ y_lemma = lemmatized_df["label"]
 """ 
 Results
 All scores are mean cross-validation scores 
-Model: Multinomial NB
+Model: Multinomial NB()
 Stemmed
 5 folds: 
 0.3420285714285714 (max_features = 1000) 
@@ -82,8 +73,12 @@ Stemmed
 0.5577142857142856 (max_features = 25000)
 0.5573857142857143 (max_features = 30000)
 0.5573857142857143 (max_features = 30000, use_idf = True)
+0.5573857142857143 (max_features = 30000, use_idf = True, norm='l2')
+0.5372857142857143 (max_features = 30000, use_idf = True, norm='l1')
 0.5573857142857143 (max_features = 30000, use_idf = True, max_df=0.6)
 0.5573857142857143 (max_features = 30000, use_idf = True, max_df=0.9)
+0.2954428571428572 (max_features = 30000, use_idf = True, min_df=0.05)
+0.5469857142857142 (max_features = 30000, use_idf = True, min_df=0.001)
 0.5250428571428571 (max_features = 30000, use_idf = False)
 0.5573714285714286 (max_features = 35000)
 0.5571428571428572 (max_features = 40000)
@@ -92,6 +87,8 @@ Stemmed
 10 folds: 0.5609857142857144
 100 folds: 0.5643571428571428
 1000 folds: 0.5639875000000001
+
+Tuning Multinomial Parameters on best tfidf 
 
 Lemmatized
 3 folds: 0.5482855547765574
