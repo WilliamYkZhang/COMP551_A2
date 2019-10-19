@@ -28,10 +28,6 @@ import pickle
 # Import validation functions 
 from validation import cross_validation, grid_search_cv
 
-
-# Get a list of stopwords
-stopwords = stopwords.words("english")
-
 # Transformers 
 c_vect = CountVectorizer(lowercase=True, encoding="utf-8", decode_error="ignore", strip_accents='unicode',stop_words=stopwords.words('english'), analyzer = "word")
 tfidf_vect = TfidfVectorizer(smooth_idf=True, norm='l2', lowercase=True, max_features=30000, use_idf=True, encoding = "utf-8",  decode_error = 'ignore', strip_accents='unicode', stop_words=stopwords.words('english'), analyzer = "word")
@@ -42,7 +38,7 @@ nml = Normalizer()
 # Estimators 
 log_reg = LogisticRegression(C=1.0, multi_class='multinomial', solver='newton-cg')
 svc = SVC(C = 1.0, kernel = 'rbf') # class weight , experiement values 
-xgb = xgb.XGBClassifier(objective='multi:softmax')
+xgb_clf = xgb.XGBClassifier()
 decision_tree_clf = DecisionTreeClassifier()
 rff = RandomForestClassifier()
 multi_NB = MultinomialNB(alpha=0.25)
@@ -194,7 +190,7 @@ Lemmatized
 """
 
 # Estimators 
-log_reg = LogisticRegression(multi_class='multinomial')
+log_reg = LogisticRegression(multi_class='multinomial', n_jobs=-1)
 svc = SVC(C = 1.0, kernel = 'rbf') # class weight , experiement values 
 xgb = xgb.XGBClassifier(objective='multi:softmax')
 decision_tree_clf = DecisionTreeClassifier()
@@ -203,27 +199,29 @@ multi_NB = MultinomialNB(alpha=0.25)
 
 # Model parameters
 params_log_reg = {
-    'clf__C': (0.2, ,0.5 ,0.7, 1.0),
-'clf__alpha': (0.25, 0.5, 0.75),
-'clf__fit_prior': (True, False),    
- solver='newton-cg'
+    'clf__C': (0.25, 0.5 ,0.75, 1.0, 1.5),
+    'clf__penalty': ('l2',),
+    'clf__class_weight':('balanced', None),
+    'clf__max_iter': (1000, 2500, 5000),
+    'clf__multi_class': ('ovr', 'multinomial'), # one vs all or multinomial   
+    'clf__solver': ('newton-cg', 'sag', 'lbfgs'),
 }
 
 params_decision_tree = {
     'clf__alpha': (0.25, 0.5, 0.75),
-'clf__fit_prior': (True, False),    
+    'clf__fit_prior': (True, False),    
 }
 
 params_rff = {
     'clf__alpha': (0.25, 0.5, 0.75),
-'clf__fit_prior': (True, False),    
+    'clf__fit_prior': (True, False),    
 }
 
 params_xgboost = {
     'clf__alpha': (0.25, 0.5, 0.75),
-'clf__fit_prior': (True, False),    
+    'clf__fit_prior': (True, False),    
 }
 
-print(grid_search_cv(model=log_reg, x=X_stem, y=y_stem, params=params_log_reg, folds=5))
-print(grid_search_cv(model=rff, x=X_stem, y=y_stem, params=, folds=5))
-print(grid_search_cv(model=decision_tree_clf, x=X_stem, y=y_stem, params=, folds=5))
+print(grid_search_cv(model=log_reg, X=X_stem, y=y_stem, params=params_log_reg, folds=5))
+# print(grid_search_cv(model=rff, X=X_stem, y=y_stem, params=, folds=5))
+# print(grid_search_cv(model=decision_tree_clf, X=X_stem, y=y_stem, params=, folds=5))
