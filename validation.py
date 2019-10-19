@@ -41,7 +41,11 @@ svc = SVC(C = 1.0, kernel = 'rbf') # class weight , experiement values
 xgb = xgb.XGBClassifier(objective='multi:softmax')
 decision_tree_clf = DecisionTreeClassifier()
 rff = RandomForestClassifier()
-multi_NB = MultinomialNB()
+multi_NB = MultinomialNB(alpha=0.25)
+params = {
+    'clf__alpha': (0.25, 0.5, 0.75),
+    'clf__fit_prior': (True, False),  
+    }
 
 # Building pipeline 
 # pipeline_cvect = Pipeline([('cvect', c_vect), ('clf', multi_NB)], verbose=True)
@@ -86,9 +90,18 @@ Stemmed
 
 10 folds: 0.5609857142857144
 100 folds: 0.5643571428571428
+100 folds: 0.5717571428571429 TUNED
 1000 folds: 0.5639875000000001
 
-Tuning Multinomial Parameters on best tfidf 
+Tuning Multinomial Naive Bayes on 5 folds: 
+0.5573857142857143 (alpha = 1)
+0.5640857142857143 (alpha = 0.15)
+0.5643857142857143 (alpha = 0.20)
+0.5647000000000000 (alpha = 0.25)
+0.5640000000000001 (alpha = 0.30)
+0.5634285714285714 (alpha = 0.35)
+0.5624142857142858 (alpha = 0.5)
+0.5602428571428572 (alpha = 0.75)
 
 Lemmatized
 3 folds: 0.5482855547765574
