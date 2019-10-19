@@ -7,17 +7,17 @@ def classify(model):
     """ Function that fits a model using the entire training set and stores its predictions on the held out test set in a csv file. """
    
     # Read datasets
-    df = pd.read_csv("preprocessed_reddit_train_WordNetLemmatizer.csv")
+    df = pd.read_csv("preprocessed_reddit_train_SnowballStemmer.csv")
 
     # Using preprocessor to transform data into tf-idf representation
-    preprocessor = Preprocessor()
+    preprocessor = Preprocessor("stemmer")
 
     # Transform training data to tf_idf representation
     x_train = preprocessor.tf_idf_vectorizer.fit_transform(df["cleaned"])
     y_train = df["label"]
     
     # Preprocess test data and transform to tf_idf representation
-    x_test_df = pd.read_csv("preprocessed_reddit_test_WordNetLemmatizer.csv")
+    x_test_df = pd.read_csv("preprocessed_reddit_test_SnowballStemmer.csv")
     x_test = preprocessor.tf_idf_vectorizer.transform(x_test_df["cleaned"].values.astype('U'))
 
     # Train model using whole training set

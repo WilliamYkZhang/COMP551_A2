@@ -15,4 +15,9 @@ Get rid of newlines
 Add features about comment length of each words 
 Plot by subreddit:
 Average comment length 
-for each subreddit most common words (add useless common words as stopwords)
+for each subreddit most common words (add useless common words to stopwords)
+
+October 18th 
+Add stopwords by investigating term frequency for each subreddit
+Add features about "the number of words" see if it helps ?
+Investigate mean and variance of every subreddit word count see if it varies a lot then it can't be used as a feature.
