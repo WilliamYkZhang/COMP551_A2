@@ -7,12 +7,27 @@ Model: Logistic Regression()
 Stemmed 
 5 folds: 
 0.5377285714285713
+0.5497714285714286 (C=4.5, penalty="l2")
+0.5357142857142858 (C=4.5, penalty="l1")
+0.5427714285714285 (solver="sag")
+0.5427428571428572 (solver="saga")
+0.5427857142857142 (solver="newton-cg")
+0.5428857142857143 (solver="lbfgs")
+0.5252142857142857 (C=0.5)
+0.5429571428571429 (C=1.5)
+0.5455857142857142 (C=2)
+0.5463285714285714 (C=2.5)
+0.5464571428571429 (C=3.0)
+0.5469285714285714 (C=3.5)
+0.5470428571428572 (C=4.0)
+0.5470571428571429 (C=4.5)
+0.5466142857142857 (C=5.0)
+0.5497714285714286 TUNED
 
 Lemmatized
 5 folds:
 0.5388857142857144
-0.5252142857142857 (C=0.5)
-0.5429571428571429 (C=1.5)
+0.5470571428571429 TUNED
 """
 
 # Read DataFrame
@@ -26,19 +41,22 @@ X_lemma = lemmatized_df["cleaned"]
 y_lemma = lemmatized_df["label"]
 
 # Model
-log_reg = LogisticRegression(C=2)
+log_reg = LogisticRegression(C=4.5, penalty="l2", multi_class='ovr', solver='liblinear', max_iter=300, dual=False, warm_start=True, fit_intercept=0.4) 
 
 # Model parameters
 params_log_reg = {
-    'clf__C': (0.25, 0.5 ,0.75, 1.0, 1.5),
-    'clf__penalty': ('l2',),
-    'clf__class_weight':('balanced', None),
-    'clf__max_iter': (1000, 2500, 5000),
-    'clf__multi_class': ('ovr', 'multinomial'), # one vs all or multinomial   
-    'clf__solver': ('newton-cg', 'sag', 'lbfgs'),
+    'clf__max_iter': (150,250,350),
+    'clf__intercept_scaling':(0.4)
+    # 'clf__multi_class': ('ovr', 'multinomial'), # one vs all or multinomial, hence one vs all is better for logistic regression
+    # 'clf__solver': ('newton-cg', 'sag', 'lbfgs','saga'),
 }
+# TODO: Tune intercept or max_iter to smaller ? 
 
 # Number of cross validation folds
 folds = 5
 
-print(cross_validation(model=log_reg,X=X_lemma, y=y_lemma, folds=folds))
+# Perform cross validation
+print(cross_validation(model=log_reg, X=X_stem, y=y_stem, folds=folds))
+
+# Perform Grid Search CV 
+# print(grid_search_cv(model=log_reg,X=X_stem, y=y_stem,params=params_log_reg, folds=folds))

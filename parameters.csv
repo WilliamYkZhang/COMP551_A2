@@ -1,0 +1,9 @@
+2019-10-19 22:47:56.296100
+Cross Validation score = 0.5257428571428572
+clf__intercept_scaling,0.5
+clf__max_iter,250
+clf__warm_start,True
+2019-10-19 23:03:52.423718
+Cross Validation score = 0.5259142857142857
+clf__intercept_scaling,0.4
+clf__max_iter,150

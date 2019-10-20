@@ -52,14 +52,11 @@ def grid_search_cv(model, X, y, params, folds):
         csv_writer = csv.writer(f, delimiter=",", lineterminator="\n")         
         # Write current time
         csv_writer.writerow([datetime.datetime.now()])
-        score = "Cross Validation score = " + str(gs_cv.best_score_)
+        score = "Cross Validation score = " + str(gs_CV.best_score_)
         csv_writer.writerow([score])        
         # Write best parameters
         for key, value in gs_CV.best_params_.items(): 
             csv_writer.writerow([key, value])   
-        csv_writer.writerow["Best estimator's parameters"]
-        for value in gs_CV.best_estimator_.get_params():
-            csv_writer.writerow(value)
  
     pickle.dump(gs_CV.best_estimator_, open("models/best_estimator_{}.pkl".format(type(model).__name__), "wb"))
 
@@ -88,14 +85,11 @@ def grid_search_cv_svd(model, X, y, params, folds):
         csv_writer = csv.writer(f, delimiter=",", lineterminator="\n")         
         # Write current time
         csv_writer.writerow([datetime.datetime.now()])
-        score = "Cross Validation score = " + str(gs_cv.best_score_)
+        score = "Cross Validation score = " + str(gs_CV.best_score_)
         csv_writer.writerow([score])        
         # Write best parameters
         for key, value in gs_CV.best_params_.items(): 
             csv_writer.writerow([key, value])   
-        csv_writer.writerow["Best estimator's parameters"]
-        for value in gs_CV.best_estimator_.get_params():
-            csv_writer.writerow(value)
  
     pickle.dump(gs_CV.best_estimator_, open("models/best_estimator_{}.pkl".format(type(model).__name__), "wb"))
 
