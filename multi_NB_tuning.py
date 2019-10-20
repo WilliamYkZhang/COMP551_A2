@@ -66,7 +66,7 @@ Tuning Multinomial Naive Bayes hyperparameters on 5 folds:
 0.5602428571428572 (alpha = 0.75)
 
 Added stopwords 
-0.5651428571428572 ***BEST
+0.5675142857142857 BEST
 
 
 10 folds: 0.5609857142857144
@@ -114,6 +114,6 @@ params = {
 }
 
 # Cross validation or 
-# print(cross_validation(model=multi_NB, X=X_stem, y=y_stem, folds=5))
-best_scores, best_params, best_estimator_params = grid_search_cv(model=multi_NB, X=X_stem, y=y_stem, params=params, folds=5)
+print(cross_validation(model=multi_NB, X=X_stem, y=y_stem, folds=5))
+# best_scores, best_params, best_estimator_params = grid_search_cv(model=multi_NB, X=X_stem, y=y_stem, params=params, folds=5)
 

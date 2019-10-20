@@ -7,3 +7,10 @@ clf__warm_start,True
 Cross Validation score = 0.5259142857142857
 clf__intercept_scaling,0.4
 clf__max_iter,150
+2019-10-20 01:11:13.236976
+2019-10-20 02:31:14.829377
+Cross Validation score = 0.4202714285714286
+clf__eta,0.005
+2019-10-20 04:21:59.781369
+Cross Validation score = 0.4202714285714286
+clf__eta,0.0005

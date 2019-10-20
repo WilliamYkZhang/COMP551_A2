@@ -1,3 +1,9 @@
 Stemming vs Lemmatization: https://nlp.stanford.edu/IR-book/html/htmledition/stemming-and-lemmatization-1.html
 Building Python Pipeline: https://scikit-learn.org/stable/tutorial/statistical_inference/putting_together.html
 Cross Validation Pipeline: https://chrisalbon.com/machine_learning/model_evaluation/cross_validation_pipeline/
+AdaBoost: https://scikit-learn.org/stable/auto_examples/ensemble/plot_adaboost_multiclass.html#id2
+Pipelines and composite estimators: https://scikit-learn.org/stable/modules/compose.html
+Feature Union: https://scikit-learn.org/0.18/auto_examples/hetero_feature_union.html
+Text Vectorization: https://www.oreilly.com/library/view/applied-text-analysis/9781491963036/ch04.html
+Feature Union: https://michelleful.github.io/code-blog/2015/06/20/pipelines/
+Multi-class-text-classification: https://towardsdatascience.com/multi-class-text-classification-with-scikit-learn-12f1e60e0a9f

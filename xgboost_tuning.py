@@ -17,7 +17,7 @@ parameters = {
     # 'clf__objective':('multi:softmax', 'binary:logistic'),   
     # 'clf__eval_metric':('rmse', 'mae', 'logloss', 'logloss', 'error', 'merror', 'mlogloss', 'auc'),
     # 'clf__seed': (0,1,2,3),
-    'clf__eta': (0.01,0.1,0.2), # learning rate
+    'clf__eta': (0.0005, 0.001, 0.005), # learning rate
     # 'clf__min_child_weight':(1,3,5,10), # Used to control over-fitting. Higher values prevent a model from learning relations which might be highly specific to the particular sample selected for a tree. Too high values can lead to under-fitting hence, it should be tuned using CV.
     # 'clf__max_depth': (3,6,9),
 }   

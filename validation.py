@@ -27,7 +27,7 @@ def cross_validation(model, X, y, folds):
     start = time.time()
 
     # Scores
-    scores = cross_val_score(pipeline_tfidf, X, y, cv=folds)
+    scores = cross_val_score(pipeline_tfidf, X, y, cv=folds, scoring="accuracy")
 
     return "Cross validation scores: {0}\nCross validation mean score: {1}\nValidation time: {2}s".format(scores, scores.mean(),time.time()-start) 
 

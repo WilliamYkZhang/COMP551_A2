@@ -27,7 +27,6 @@ Stemmed
 Lemmatized
 5 folds:
 0.5388857142857144
-0.5470571428571429 TUNED
 """
 
 # Read DataFrame
@@ -46,11 +45,10 @@ log_reg = LogisticRegression(C=4.5, penalty="l2", multi_class='ovr', solver='lib
 # Model parameters
 params_log_reg = {
     'clf__max_iter': (150,250,350),
-    'clf__intercept_scaling':(0.4)
+    'clf__intercept_scaling':(0.3,0.4,0.5)
     # 'clf__multi_class': ('ovr', 'multinomial'), # one vs all or multinomial, hence one vs all is better for logistic regression
     # 'clf__solver': ('newton-cg', 'sag', 'lbfgs','saga'),
 }
-# TODO: Tune intercept or max_iter to smaller ? 
 
 # Number of cross validation folds
 folds = 5
