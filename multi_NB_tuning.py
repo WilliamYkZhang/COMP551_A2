@@ -117,7 +117,7 @@ params = {
 
 
 # Perform Cross-Validation to validate model 
-printprint(cross_validation(model=multi_NB, X=X_stem, y=y_stem, folds=folds))
+print(cross_validation(model=multi_NB, X=X_stem, y=y_stem, folds=folds))
 
 # Perform Grid Search CV to find the best parameters
 # best_scores, best_params, best_estimator_params = grid_search_cv(model=multi_NB, X=X_stem, y=y_stem, params=params, folds=5)
