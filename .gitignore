@@ -7,3 +7,6 @@ prediction_2.csv
 2_LSTM_250.h5
 2_LSTM_250_weights.h5
 __pycache__/
+
+predictions_2.csv
+predictions_3.csv

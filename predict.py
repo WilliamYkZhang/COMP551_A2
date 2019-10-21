@@ -29,7 +29,8 @@ def classify(model):
     # Turn predictions back to original labels
     preprocessor.label_encoder.fit(df["subreddits"])
     predictions = preprocessor.label_encoder.inverse_transform(predictions)
-    
+
     # save predictions 
     pred_df =pd.DataFrame({"Id": x_test_df.id , "Category": predictions})
-    pred_df.to_csv("predictions.csv", index=False)
+    print(pred_df)
+    pred_df.to_csv("predictions_3.csv", index=False)
