@@ -5,6 +5,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC, SVC
 import pandas as pd 
 from validation import cross_validation, grid_search_cv
+from predict import classify
 
 """ 
 Results
@@ -42,7 +43,10 @@ clf3 = VotingClassifier(estimators=[('lr', log_reg), ("nb", multi_NB)], voting="
 folds = 5
 
 # Perform cross validation
-print(cross_validation(model=clf2, X=X_stem, y=y_stem, folds=folds))
+print(cross_validation(model=clf, X=X_stem, y=y_stem, folds=folds))
 
 # Perform Grid Search CV 
 # print(grid_search_cv(model=log_reg,X=X_stem, y=y_stem,params=params_log_reg, folds=folds))
+
+# Predict on test set 
+# classify(clf)
